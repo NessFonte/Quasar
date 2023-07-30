@@ -60,7 +60,7 @@ const linksList = [
     title: 'Flex Layout',
     caption: 'Estilos con Flex en Quasar',
     icon: 'las la-layer-group',
-    link: 'typography'
+    link: 'flex'
   },
   {
     title: 'Docs',
