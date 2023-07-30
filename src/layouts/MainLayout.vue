@@ -23,6 +23,7 @@
       v-model="sideMenuOpen"
       show-if-above
       bordered
+      class="bg-grey-1"
     >
       <q-list>
         <q-item-label
