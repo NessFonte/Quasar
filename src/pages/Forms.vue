@@ -11,17 +11,20 @@
         >
           <q-input
             filled
-            v-model="name"
+            v-model="user.email"
             label="Correo *"
             type="email"
             lazy-rules
-            :rules="[ val => val && val.length > 0 || 'Campo obligatorio']"
+            :rules="[ 
+              val => val && val.length > 0 || 'Campo obligatorio',
+              isValidEmail
+              ]"
           />
 
           <q-input
             filled
             type="password"
-            v-model="age"
+            v-model="user.password"
             label="Contraseña *"
             lazy-rules
             :rules="[ val => val && val.length > 0 || 'Campo obligatorio']"
@@ -30,10 +33,22 @@
           <q-input
             filled
             type="password"
-            v-model="age"
+            v-model="user.password_confirm"
             label="Confirmar contraseña *"
             lazy-rules
-            :rules="[ val => val && val.length > 0 || 'Campo obligatorio']"
+            :rules="[ 
+              val => val && val.length > 0 || 'Campo obligatorio',
+              isSamePassword
+              ]"
+          />
+
+          <q-checkbox
+            rigth-label
+            v-model="user.conditions"
+            label="Acepto las condiciones y términos"
+            checked-icon="task_alt"
+            unchecked-icon="highlight_off"
+            :style="user.errorInCondition && !user.conditions && 'color: red'"
           />
 
           <div class="row justify-end">
@@ -47,9 +62,58 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
+import { useQuasar } from 'quasar'
 
 export default defineComponent({
-  name: 'Forms'
+  name: 'Forms',
+
+  setup() {
+    const user = ref({
+      email: '',
+      password: '',
+      password_confirm: '',
+      conditions: false,
+      errorInCondition: false,
+    })
+    const $q = useQuasar()
+
+    return {
+      user,
+
+      onSubmit() {
+        user.value.errorInCondition = false
+
+        if(!user.value.conditions) {
+          $q.notify({
+            message: 'Debe aceptar las condiciones de uso',
+            icon: 'las la-exclamation-circle',
+          })
+          user.value.errorInCondition = true
+          return
+        }
+
+      },
+
+      onReset() {
+        user.value = {
+          email: '',
+          password: '',
+          password_confirm: '',
+          conditions: false,
+          errorInCondition: false,
+        }
+      },
+
+      isValidEmail( val ) {
+          const emailPattern = /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
+          return emailPattern.test(val) || 'El correo no parece ser válido';
+      },
+
+      isSamePassword( val ) {
+        return (val === user.value.password) || 'Las contraseñas no son iguales'
+      }
+    }
+  }
 })
 </script>
