@@ -6,10 +6,16 @@ export const linksList = [
       link: 'typography'
     },
     {
-      title: 'Flex Layout',
+      title: 'Flex',
       caption: 'Estilos con Flex en Quasar',
       icon: 'las la-layer-group',
       link: 'flex'
+    },
+    {
+      title: 'Dialogs',
+      caption: 'Alertas, diálogos y confirmaciones',
+      icon: 'las la-comments',
+      link: 'dialogs'
     },
     {
       title: 'Docs',
